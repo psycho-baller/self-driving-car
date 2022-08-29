@@ -8,16 +8,15 @@
   //variables
   let canvas: HTMLCanvasElement;
   let car: Car;
-  let ctx: any;
+  let ctx: CanvasRenderingContext2D;
   let road: Road;
   let traffic: Car[];
   let colors: string[] = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#00ffff', '#ff00ff', '#ffffff'];
 
   onMount(() => {
     canvas = document.getElementById('carCanvas') as HTMLCanvasElement;
-    // @ts-ignore
     canvas.width = 200;
-    ctx = canvas.getContext('2d');
+    ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     road = new Road(canvas.width / 2, canvas.width * 0.9);
     car = new Car(road.getLaneCenter(1), 100, 30, 50, "KEYS");
     traffic = [

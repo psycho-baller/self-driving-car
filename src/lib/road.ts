@@ -2,15 +2,15 @@ import type { Point } from "../types/point.type";
 import { lerp } from "../utils";
 
 export class Road {
-    x: number;
-    width: number;
-    laneCount: number;
-    left: number;
-    right: number;
-    top: number;
-    bottom: number;
-    borders: Point[][];
-    constructor(x: number, width: number, laneCount: number = 3) {
+  x: number;
+  width: number;
+  laneCount: number;
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+  borders: Point[][];
+  constructor(x: number, width: number, laneCount: number = 3) {
     this.x = x;
     this.width = width;
     this.laneCount = laneCount;
@@ -37,7 +37,7 @@ export class Road {
     return this.left + laneWidth / 2 + Math.min(laneIndex, this.laneCount - 1) * laneWidth;
   }
 
-  draw(ctx: { lineWidth: number; strokeStyle: string; setLineDash: (arg0: number[]) => void; beginPath: () => void; moveTo: (arg0: number, arg1: number) => void; lineTo: (arg0: number, arg1: number) => void; stroke: () => void; }) {
+  draw(ctx: CanvasRenderingContext2D) {
     ctx.lineWidth = 5;
     ctx.strokeStyle = 'white';
 
