@@ -4,7 +4,6 @@ import type { Point } from 'src/types/point.type';
 import type { Ray } from 'src/types/ray.type';
 import type { Reading } from 'src/types/reading.type';
 
-
 export class Sensor {
   car: Car;
   rayCount: number;
@@ -23,15 +22,21 @@ export class Sensor {
     this.readings = [];
   }
 
-  update(roadBorders: Point[][]) {
+  update(roadBorders: Point[][], traffic: Car[]) {
     this.#castRays();
     this.readings = [];
     for (let i = 0; i < this.rays.length; i++) {
-      this.readings.push(this.#getReading(this.rays[i] as Ray[], roadBorders as Point[][]) as Reading);
+      this.readings.push(
+        this.#getReading(
+          this.rays[i] as Ray[],
+          roadBorders as Point[][],
+          traffic as Car[]
+        ) as Reading
+      );
     }
   }
 
-  #getReading(ray: Ray[], roadBorders: Point[][]): Reading | null {
+  #getReading(ray: Ray[], roadBorders: Point[][], traffic: Car[]): Reading | null {
     let touches = [];
 
     for (let i = 0; i < roadBorders.length; i++) {
@@ -43,6 +48,21 @@ export class Sensor {
       );
       if (touch) {
         touches.push(touch);
+      }
+    }
+
+    for (let i = 0; i < traffic.length; i++) {
+      const poly = traffic[i].polygon;
+      for (let j = 0; j < poly.length; j++) {
+        const value = getIntersection(
+          ray[0] as Ray,
+          ray[1] as Ray,
+          poly[j] as Point,
+          poly[(j + 1) % poly.length] as Point
+        );
+        if (value) {
+          touches.push(value);
+        }
       }
     }
 
@@ -78,7 +98,7 @@ export class Sensor {
 
   draw(ctx: CanvasRenderingContext2D) {
     for (let i = 0; i < this.rayCount; i++) {
-      let end = this.readings[i] ? this.readings[i] as Reading : this.rays[i][1] as Ray;
+      let end = this.readings[i] ? (this.readings[i] as Reading) : (this.rays[i][1] as Ray);
 
       ctx.beginPath();
       ctx.lineWidth = 2;
