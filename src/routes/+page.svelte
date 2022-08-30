@@ -99,7 +99,7 @@
     }
 
     carCtx.globalAlpha = 1;
-    bestCar.draw(carCtx, !raceMode);
+    bestCar.draw(carCtx, true);
     if (raceMode) {
       UsrCar.draw(carCtx);
     }
