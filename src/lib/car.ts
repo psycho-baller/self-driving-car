@@ -28,8 +28,8 @@ export class Car {
     width: number,
     height: number,
     controlType: string,
-    color: string = "blue",
     maxSpeed: number = 3,
+    color: string = 'blue',
     acceleration: number = 0.2,
     friction: number = 0.05
   ) {

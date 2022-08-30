@@ -3,20 +3,23 @@
   import { NeuralNetwork } from '$lib/network';
   import { Road } from '$lib/road';
   import { Visualizer } from '$lib/visualizer';
-  import { getRandomColor } from "../utils";
 
   import { onMount } from 'svelte';
+  import { getTraffic } from '../data/traffic';
 
   //variables
   let carCanvas: HTMLCanvasElement;
   let networkCanvas: HTMLCanvasElement;
   let cars: Car[];
+  let UsrCar: Car;
   let carCtx: CanvasRenderingContext2D;
   let networkCtx: CanvasRenderingContext2D;
   let road: Road;
   let traffic: Car[];
   let bestCar: Car;
-
+  let AISpeed: number = 5;
+  let UserSpeed: number = 6;
+  let raceMode: boolean = true;
 
   onMount(() => {
     carCanvas = document.getElementById('carCanvas') as HTMLCanvasElement;
@@ -26,91 +29,40 @@
     carCtx = carCanvas.getContext('2d') as CanvasRenderingContext2D;
     networkCtx = networkCanvas.getContext('2d') as CanvasRenderingContext2D;
     road = new Road(carCanvas.width / 2, carCanvas.width * 0.9);
-
-    const N = 100;
+    traffic = getTraffic(road);
+    const N = 1;
     cars = generateCars(N);
     bestCar = cars[0];
+    const speed = bestCar.maxSpeed;
     if (localStorage.getItem('bestBrain')) {
       for (let i = 0; i < cars.length; i++) {
-        cars[i].brain = JSON.parse(localStorage.getItem('bestBrain') as string);
+        cars[i].brain = JSON.parse(localStorage.getItem(`bestBrain-${speed}`) as string)
+          ? (JSON.parse(localStorage.getItem(`bestBrain-${speed}`) as string) as NeuralNetwork)
+          : (JSON.parse(localStorage.getItem('bestBrain') as string) as NeuralNetwork);
         if (i != 0) {
-          NeuralNetwork.mutate(cars[i].brain, 0.2);
+          NeuralNetwork.mutate(cars[i].brain, 0.1);
         }
       }
     }
+    if (raceMode) {
+      UsrCar = new Car(road.getLaneCenter(1), 100, 30, 50, 'KEYS', UserSpeed);
+    }
 
-    // car = new Car(road.getLaneCenter(1), 100, 30, 50, "AI");
-    traffic = [
-      new Car(
-        road.getLaneCenter(1),
-        -100,
-        30,
-        50,
-        'DUMMY',
-         getRandomColor(),
-        2
-      ),
-      new Car(
-        road.getLaneCenter(0),
-        -100,
-        30,
-        50,
-        'DUMMY',
-         getRandomColor(),
-        2
-      ),
-      new Car(
-        road.getLaneCenter(2),
-        -200,
-        30,
-        50,
-        'DUMMY',
-         getRandomColor(),
-        2.3
-      ),
-      new Car(
-        road.getLaneCenter(1),
-        -200,
-        30,
-        50,
-        'DUMMY',
-         getRandomColor(),
-        2.2
-      ),
-      new Car(
-        road.getLaneCenter(0),
-        -400,
-        30,
-        50,
-        'DUMMY',
-         getRandomColor(),
-        2.2
-      ),
-      new Car(
-        road.getLaneCenter(1),
-        -700,
-        30,
-        50,
-        'DUMMY',
-         getRandomColor(),
-        2.4
-      )
-    ];
     animate();
   });
 
-  function save() {
-    localStorage.setItem('bestBrain', JSON.stringify(bestCar.brain));
+  function save(speed: number) {
+    localStorage.setItem(`bestBrain-${speed}`, JSON.stringify(bestCar.brain));
   }
 
-  function discard() {
-    localStorage.removeItem('bestBrain');
+  function discard(speed: number) {
+    localStorage.removeItem(`bestBrain-${speed}`);
   }
 
   function generateCars(N: number) {
     const cars = [];
     for (let i = 1; i <= N; i++) {
-      cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, 'AI'));
+      cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, 'AI', AISpeed));
     }
     return cars;
   }
@@ -122,6 +74,7 @@
     for (let i = 0; i < cars.length; i++) {
       cars[i].update(road.borders, traffic);
     }
+    UsrCar.update(road.borders, traffic);
 
     bestCar = cars.find((c) => c.y == Math.min(...cars.map((c) => c.y))) as Car;
 
@@ -130,7 +83,11 @@
 
     // makes the road infinite
     carCtx.save();
-    carCtx.translate(0, -bestCar.y + carCanvas.height * 0.7);
+    if (raceMode) {
+      carCtx.translate(0, -UsrCar.y + carCanvas.height * 0.7);
+    } else {
+      carCtx.translate(0, -bestCar.y + carCanvas.height * 0.7);
+    }
 
     road.draw(carCtx);
     for (let i = 0; i < traffic.length; i++) {
@@ -142,7 +99,10 @@
     }
 
     carCtx.globalAlpha = 1;
-    bestCar.draw(carCtx, true);
+    bestCar.draw(carCtx, !raceMode);
+    if (raceMode) {
+      UsrCar.draw(carCtx);
+    }
 
     carCtx.restore();
 
@@ -155,8 +115,8 @@
 <main class="body">
   <canvas id="carCanvas" />
   <div id="verticalButtons">
-    <button on:click={save}>💾</button>
-    <button on:click={discard}>🗑️</button>
+    <button on:click={() => save(AISpeed)}>💾</button>
+    <button on:click={() => discard(AISpeed)}>🗑️</button>
   </div>
   <canvas id="networkCanvas" />
 </main>
