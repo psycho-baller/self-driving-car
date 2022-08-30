@@ -1,20 +1,22 @@
 <script lang="ts">
   import { Car } from '$lib/car';
+  import { NeuralNetwork } from '$lib/network';
   import { Road } from '$lib/road';
-import { Visualizer } from '$lib/visualizer';
- 
+  import { Visualizer } from '$lib/visualizer';
+  import { getRandomColor } from "../utils";
 
   import { onMount } from 'svelte';
 
   //variables
   let carCanvas: HTMLCanvasElement;
   let networkCanvas: HTMLCanvasElement;
-  let car: Car;
+  let cars: Car[];
   let carCtx: CanvasRenderingContext2D;
   let networkCtx: CanvasRenderingContext2D;
   let road: Road;
   let traffic: Car[];
-  let colors: string[] = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#00ffff', '#ff00ff', '#ffffff'];
+  let bestCar: Car;
+
 
   onMount(() => {
     carCanvas = document.getElementById('carCanvas') as HTMLCanvasElement;
@@ -24,52 +26,163 @@ import { Visualizer } from '$lib/visualizer';
     carCtx = carCanvas.getContext('2d') as CanvasRenderingContext2D;
     networkCtx = networkCanvas.getContext('2d') as CanvasRenderingContext2D;
     road = new Road(carCanvas.width / 2, carCanvas.width * 0.9);
-    car = new Car(road.getLaneCenter(1), 100, 30, 50, "AI");
-    traffic = [
-      new Car(road.getLaneCenter(1), -100, 30, 50, "DUMMY", 2),
-      new Car(road.getLaneCenter(0), -100, 30, 50, "DUMMY", 1.7),
-      new Car(road.getLaneCenter(2), -200, 30, 50, "DUMMY", 2.3),
-      new Car(road.getLaneCenter(0), -600, 30, 50, "DUMMY", 2.2),
-      new Car(road.getLaneCenter(1), -600, 30, 50, "DUMMY", 2.8),
-      new Car(road.getLaneCenter(2), -700, 30, 50, "DUMMY", 2.4),
-    ]
-    animate();
 
+    const N = 100;
+    cars = generateCars(N);
+    bestCar = cars[0];
+    if (localStorage.getItem('bestBrain')) {
+      for (let i = 0; i < cars.length; i++) {
+        cars[i].brain = JSON.parse(localStorage.getItem('bestBrain') as string);
+        if (i != 0) {
+          NeuralNetwork.mutate(cars[i].brain, 0.2);
+        }
+      }
+    }
+
+    // car = new Car(road.getLaneCenter(1), 100, 30, 50, "AI");
+    traffic = [
+      new Car(
+        road.getLaneCenter(1),
+        -100,
+        30,
+        50,
+        'DUMMY',
+         getRandomColor(),
+        2
+      ),
+      new Car(
+        road.getLaneCenter(0),
+        -100,
+        30,
+        50,
+        'DUMMY',
+         getRandomColor(),
+        2
+      ),
+      new Car(
+        road.getLaneCenter(2),
+        -200,
+        30,
+        50,
+        'DUMMY',
+         getRandomColor(),
+        2.3
+      ),
+      new Car(
+        road.getLaneCenter(1),
+        -200,
+        30,
+        50,
+        'DUMMY',
+         getRandomColor(),
+        2.2
+      ),
+      new Car(
+        road.getLaneCenter(0),
+        -400,
+        30,
+        50,
+        'DUMMY',
+         getRandomColor(),
+        2.2
+      ),
+      new Car(
+        road.getLaneCenter(1),
+        -700,
+        30,
+        50,
+        'DUMMY',
+         getRandomColor(),
+        2.4
+      )
+    ];
+    animate();
   });
 
+  function save() {
+    localStorage.setItem('bestBrain', JSON.stringify(bestCar.brain));
+  }
+
+  function discard() {
+    localStorage.removeItem('bestBrain');
+  }
+
+  function generateCars(N: number) {
+    const cars = [];
+    for (let i = 1; i <= N; i++) {
+      cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, 'AI'));
+    }
+    return cars;
+  }
+
   function animate(time: number = 0) {
-    for(let i = 0; i < traffic.length; i++) {
+    for (let i = 0; i < traffic.length; i++) {
       traffic[i].update(road.borders, []);
     }
-    car.update(road.borders, traffic);
+    for (let i = 0; i < cars.length; i++) {
+      cars[i].update(road.borders, traffic);
+    }
+
+    bestCar = cars.find((c) => c.y == Math.min(...cars.map((c) => c.y))) as Car;
 
     carCanvas.height = window.innerHeight;
     networkCanvas.height = window.innerHeight;
 
     // makes the road infinite
     carCtx.save();
-    carCtx.translate(0, -car.y + carCanvas.height * 0.7);
+    carCtx.translate(0, -bestCar.y + carCanvas.height * 0.7);
 
     road.draw(carCtx);
-    for(let i=0;i<traffic.length;i++){
-        traffic[i].draw(carCtx,colors[i%colors.length]);
+    for (let i = 0; i < traffic.length; i++) {
+      traffic[i].draw(carCtx, false);
     }
-    car.draw(carCtx);
+    carCtx.globalAlpha = 0.2;
+    for (let i = 0; i < cars.length; i++) {
+      cars[i].draw(carCtx);
+    }
+
+    carCtx.globalAlpha = 1;
+    bestCar.draw(carCtx, true);
 
     carCtx.restore();
 
-    networkCtx.lineDashOffset=-time/50;
-    Visualizer.drawNetwork(networkCtx, car.brain);
+    networkCtx.lineDashOffset = -time / 50;
+    Visualizer.drawNetwork(networkCtx, cars[0].brain);
     requestAnimationFrame(animate);
   }
 </script>
 
 <main class="body">
   <canvas id="carCanvas" />
-  <canvas id="networkCanvas"></canvas>
+  <div id="verticalButtons">
+    <button on:click={save}>💾</button>
+    <button on:click={discard}>🗑️</button>
+  </div>
+  <canvas id="networkCanvas" />
 </main>
 
 <style>
+  #verticalButtons {
+    display: flex;
+    flex-direction: column;
+  }
+
+  button {
+    border: none;
+    border-radius: 5px;
+    padding: 5px 5px 7px 5px;
+    margin: 2px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: blue;
+  }
+
+  /* on click, make the button red */
+  button:active {
+    background: red;
+  }
+
   #carCanvas {
     background: lightgray;
   }
