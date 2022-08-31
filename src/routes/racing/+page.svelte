@@ -8,7 +8,6 @@
 
   //variables
   let carCanvas: HTMLCanvasElement;
-  let cars: Car[];
   let UsrCar: Car;
   let carCtx: CanvasRenderingContext2D;
   let road: Road;
@@ -20,16 +19,16 @@
 
   onMount(() => {
     carCanvas = document.getElementById('carCanvas') as HTMLCanvasElement;
-    carCanvas.width = 100;
+    carCanvas.width = 200;
     carCtx = carCanvas.getContext('2d') as CanvasRenderingContext2D;
     road = new Road(carCanvas.width / 2, carCanvas.width * 0.9);
     traffic = getTraffic(road);
     // const N = 1;
     // cars = generateCars(N);
     bestCar = new Car(road.getLaneCenter(1), 100, 30, 50, 'AI', AiSpeed);
-    bestCar.brain = JSON.parse(localStorage.getItem(`bestBrain-${AiSpeed}`) as string)
-      ? (JSON.parse(localStorage.getItem(`bestBrain-${AiSpeed}`) as string) as NeuralNetwork)
-      : (JSON.parse(localStorage.getItem('bestBrain') as string) as NeuralNetwork);
+    bestCar.brain = JSON.parse(
+      localStorage.getItem(`bestBrain-${AiSpeed}`) as string
+    ) as NeuralNetwork;
 
     UsrCar = new Car(road.getLaneCenter(1), 100, 30, 50, 'KEYS', UserSpeed);
 
@@ -40,12 +39,10 @@
     for (let i = 0; i < traffic.length; i++) {
       traffic[i].update(road.borders, []);
     }
-    for (let i = 0; i < cars.length; i++) {
-      cars[i].update(road.borders, traffic);
-    }
+    bestCar.update(road.borders, traffic);
     UsrCar.update(road.borders, traffic);
 
-    bestCar = cars.find((c) => c.y == Math.min(...cars.map((c) => c.y))) as Car;
+    // bestCar = cars.find((c) => c.y == Math.min(...cars.map((c) => c.y))) as Car;
 
     carCanvas.height = window.innerHeight;
 
@@ -57,12 +54,7 @@
     for (let i = 0; i < traffic.length; i++) {
       traffic[i].draw(carCtx, false);
     }
-    carCtx.globalAlpha = 0.2;
-    for (let i = 0; i < cars.length; i++) {
-      cars[i].draw(carCtx);
-    }
 
-    carCtx.globalAlpha = 1;
     bestCar.draw(carCtx, true);
     UsrCar.draw(carCtx);
 
