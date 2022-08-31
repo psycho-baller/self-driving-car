@@ -3,7 +3,6 @@
   import { NeuralNetwork } from '$lib/network';
   import { Road } from '$lib/road';
   import { Visualizer } from '$lib/visualizer';
-  import { getRandomColor } from "../../utils";
   import { getTraffic } from '../../data/traffic';
 
   import { onMount } from 'svelte';
@@ -17,6 +16,7 @@
   let road: Road;
   let traffic: Car[];
   let bestCar: Car;
+  let speed: number = 3;
 
 
   onMount(() => {
@@ -28,14 +28,17 @@
     networkCtx = networkCanvas.getContext('2d') as CanvasRenderingContext2D;
     road = new Road(carCanvas.width / 2, carCanvas.width * 0.9);
 
-    const N = 10;
+    const N = 200;
     cars = generateCars(N);
     bestCar = cars[0];
-    if (localStorage.getItem('bestBrain')) {
+    speed = bestCar.maxSpeed;
+    if (localStorage.getItem(`bestBrain-${speed}`)) {
       for (let i = 0; i < cars.length; i++) {
-        cars[i].brain = JSON.parse(localStorage.getItem('bestBrain') as string);
+        cars[i].brain = JSON.parse(localStorage.getItem(`bestBrain-${speed}`) as string)
+          ? (JSON.parse(localStorage.getItem(`bestBrain-${speed}`) as string) as NeuralNetwork)
+          : (JSON.parse(localStorage.getItem('bestBrain') as string) as NeuralNetwork);
         if (i != 0) {
-          NeuralNetwork.mutate(cars[i].brain, 0.2);
+          NeuralNetwork.mutate(cars[i].brain, 0.01);
         }
       }
     }
@@ -46,17 +49,17 @@
   });
 
   function save() {
-    localStorage.setItem('bestBrain', JSON.stringify(bestCar.brain));
+    localStorage.setItem(`bestBrain-${speed}`, JSON.stringify(bestCar.brain));
   }
 
   function discard() {
-    localStorage.removeItem('bestBrain');
+    localStorage.removeItem(`bestBrain-${speed}`);
   }
 
   function generateCars(N: number) {
     const cars = [];
     for (let i = 1; i <= N; i++) {
-      cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, 'AI', 4));
+      cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, 'AI', speed));
     }
     return cars;
   }
