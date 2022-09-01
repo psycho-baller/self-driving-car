@@ -13,9 +13,11 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "next",
+		"@sveltejs/adapter-static": "^1.0.0-next.41",
 		"@sveltejs/kit": "next",
 		"@typescript-eslint/eslint-plugin": "^5.27.0",
 		"@typescript-eslint/parser": "^5.27.0",
+		"carbon-components-svelte": "^0.70.4",
 		"eslint": "^8.16.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-svelte3": "^4.0.0",
@@ -30,6 +32,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"sveltestrap": "^5.9.0"
+		"@svelteuidev/composables": "^0.7.1",
+		"@svelteuidev/core": "^0.7.2",
+		"radix-icons-svelte": "^1.2.1"
 	}
 }

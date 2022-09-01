@@ -14,9 +14,8 @@
   let traffic: Car[];
   let bestCar: Car;
 
-  let AiSpeed: number = 5;
-  let UserSpeed: number = 6;
-
+  let AiSpeed: number = 3;
+  let UserSpeed: number = 3.3;
   onMount(() => {
     carCanvas = document.getElementById('carCanvas') as HTMLCanvasElement;
     carCanvas.width = 200;
