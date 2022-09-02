@@ -3,6 +3,7 @@
   import type { NeuralNetwork } from '$lib/network';
   import { Road } from '$lib/road';
 
+  import { page } from '$app/stores';
   import { onMount } from 'svelte';
   import { getTraffic } from '../../data/traffic';
 
@@ -14,16 +15,19 @@
   let traffic: Car[];
   let bestCar: Car;
 
-  let AiSpeed: number = 3;
-  let UserSpeed: number = 3.3;
+  const AiSpd = $page.url.searchParams.get('AiSpd') || '4';
+  const UsrSpd = $page.url.searchParams.get('UsrSpd') || '4';
+
+  const AiSpeed: number = parseInt(AiSpd);
+  const UserSpeed: number = parseInt(UsrSpd);
+
+
   onMount(() => {
     carCanvas = document.getElementById('carCanvas') as HTMLCanvasElement;
     carCanvas.width = 200;
     carCtx = carCanvas.getContext('2d') as CanvasRenderingContext2D;
     road = new Road(carCanvas.width / 2, carCanvas.width * 0.9);
     traffic = getTraffic(road);
-    // const N = 1;
-    // cars = generateCars(N);
     bestCar = new Car(road.getLaneCenter(1), 100, 30, 50, 'AI', AiSpeed);
     bestCar.brain = JSON.parse(
       localStorage.getItem(`bestBrain-${AiSpeed}`) as string

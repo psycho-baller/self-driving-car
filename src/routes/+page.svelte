@@ -9,7 +9,6 @@
   import { EnvelopeClosed, Gear, InfoCircled } from 'radix-icons-svelte';
   import Brain from "$lib/brain.svelte";
 import RaceFlag from '$lib/raceFlag.svelte';
-;
 
   onMount(() => {
     for (let i in brains) {
@@ -20,14 +19,12 @@ import RaceFlag from '$lib/raceFlag.svelte';
   });
 </script>
 
-<main>
-  <Tabs color="gray" tabPadding="lg">
+  <Tabs color="cyan" tabPadding="lg">
     <Tabs.Tab label="Racing Mode" icon={RaceFlag}>
       <RaceConfig />
     </Tabs.Tab>
     <Tabs.Tab label="Learning Mode" icon={Brain}><LearnConfig /></Tabs.Tab>
-    <Tabs.Tab label="Settings" icon={Gear}>Settings tab content</Tabs.Tab>
-    <Tabs.Tab label="About" icon={InfoCircled}>About tab content</Tabs.Tab>
+    <Tabs.Tab icon={InfoCircled}>About tab content</Tabs.Tab>
   </Tabs>
 
   <!-- <div style="margin-top: 1em;">
@@ -43,7 +40,6 @@ import RaceFlag from '$lib/raceFlag.svelte';
     <LearnConfig />
   {/if}
      -->
-</main>
 
 <style>
 

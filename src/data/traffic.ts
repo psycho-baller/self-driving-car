@@ -5,14 +5,14 @@ import { getRandomColor } from "../utils";
 
 export function getTraffic(road: Road) {
     return [
-      // new Car(road.getLaneCenter(1), -100, 30, 50, 'DUMMY', 2, getRandomColor()),
-      // new Car(road.getLaneCenter(0), -100, 30, 50, 'DUMMY', 2, getRandomColor()),
-      // new Car(road.getLaneCenter(2), -300, 30, 50, 'DUMMY', 2, getRandomColor()),
-      // new Car(road.getLaneCenter(1), -300, 30, 50, 'DUMMY', 2, getRandomColor()),
-      new Car(road.getLaneCenter(1), -150, 30, 50, 'DUMMY', 2, getRandomColor()),
-      new Car(road.getLaneCenter(0), -250, 30, 50, 'DUMMY', 2, getRandomColor()),
-      new Car(road.getLaneCenter(2), -250, 30, 50, 'DUMMY', 2, getRandomColor()),
-      new Car(road.getLaneCenter(1), -350, 30, 50, 'DUMMY', 2, getRandomColor()),
+      new Car(road.getLaneCenter(1), -100, 30, 50, 'DUMMY', 2, getRandomColor()),
+      new Car(road.getLaneCenter(0), -100, 30, 50, 'DUMMY', 2, getRandomColor()),
+      new Car(road.getLaneCenter(2), -300, 30, 50, 'DUMMY', 2, getRandomColor()),
+      new Car(road.getLaneCenter(1), -300, 30, 50, 'DUMMY', 2, getRandomColor()),
+      // new Car(road.getLaneCenter(1), -150, 30, 50, 'DUMMY', 2, getRandomColor()),
+      // new Car(road.getLaneCenter(0), -250, 30, 50, 'DUMMY', 2, getRandomColor()),
+      // new Car(road.getLaneCenter(2), -250, 30, 50, 'DUMMY', 2, getRandomColor()),
+      // new Car(road.getLaneCenter(1), -350, 30, 50, 'DUMMY', 2, getRandomColor()),
       new Car(road.getLaneCenter(0), -600, 30, 50, 'DUMMY', 2, getRandomColor()),
       new Car(road.getLaneCenter(1), -700, 30, 50, 'DUMMY', 2, getRandomColor()),
       new Car(road.getLaneCenter(2), -820, 30, 50, 'DUMMY', 2, getRandomColor()),

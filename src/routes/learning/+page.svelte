@@ -6,6 +6,7 @@
   import { getTraffic } from '../../data/traffic';
 
   import { onMount } from 'svelte';
+  import { page } from '$app/stores';
 
   //variables
   let carCanvas: HTMLCanvasElement;
@@ -16,8 +17,15 @@
   let road: Road;
   let traffic: Car[];
   let bestCar: Car;
-  let speed: number = 3;
 
+  const AiSpd = $page.url.searchParams.get('AiSpd') || '6';
+  const mutationRate = $page.url.searchParams.get('mtn') || '0.1';
+  const n = $page.url.searchParams.get('n') || '10';
+
+  const floatSpd: number = parseFloat(AiSpd);
+  const speed: number = Math.round(floatSpd);
+  const mutation: number = parseFloat(mutationRate);
+  const N: number = parseInt(n);
 
   onMount(() => {
     carCanvas = document.getElementById('carCanvas') as HTMLCanvasElement;
@@ -28,17 +36,15 @@
     networkCtx = networkCanvas.getContext('2d') as CanvasRenderingContext2D;
     road = new Road(carCanvas.width / 2, carCanvas.width * 0.9);
 
-    const N = 200;
     cars = generateCars(N);
     bestCar = cars[0];
-    speed = bestCar.maxSpeed;
     if (localStorage.getItem(`bestBrain-${speed}`)) {
       for (let i = 0; i < cars.length; i++) {
-        cars[i].brain = JSON.parse(localStorage.getItem(`bestBrain-${speed}`) as string)
-          ? (JSON.parse(localStorage.getItem(`bestBrain-${speed}`) as string) as NeuralNetwork)
-          : (JSON.parse(localStorage.getItem('bestBrain') as string) as NeuralNetwork);
+        cars[i].brain = JSON.parse(localStorage.getItem(`bestBrain-${floatSpd}`) as string)
+          ? (JSON.parse(localStorage.getItem(`bestBrain-${floatSpd}`) as string) as NeuralNetwork)
+          : (JSON.parse(localStorage.getItem(`bestBrain-${speed}`) as string) as NeuralNetwork);
         if (i != 0) {
-          NeuralNetwork.mutate(cars[i].brain, 0.01);
+          NeuralNetwork.mutate(cars[i].brain, mutation);
         }
       }
     }
@@ -49,7 +55,7 @@
   });
 
   function save() {
-    localStorage.setItem(`bestBrain-${speed}`, JSON.stringify(bestCar.brain));
+    localStorage.setItem(`bestBrain-${floatSpd}`, JSON.stringify(bestCar.brain));
   }
 
   function discard() {
@@ -59,7 +65,7 @@
   function generateCars(N: number) {
     const cars = [];
     for (let i = 1; i <= N; i++) {
-      cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, 'AI', speed));
+      cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, 'AI', floatSpd));
     }
     return cars;
   }
