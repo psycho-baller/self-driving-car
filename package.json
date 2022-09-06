@@ -1,7 +1,7 @@
 {
 	"name": "self-driving-car",
 	"version": "0.0.1",
-	"private": true,
+	"private": false,
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -32,8 +32,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@svelteuidev/composables": "^0.7.1",
-		"@svelteuidev/core": "^0.7.2",
+		"@svelteuidev/composables": "^0.7.3",
+		"@svelteuidev/core": "^0.7.3",
 		"radix-icons-svelte": "^1.2.1"
 	}
 }
