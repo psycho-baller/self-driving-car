@@ -25,7 +25,7 @@
 
 # Future plans
 
-- [ ] about section
+- [x] about section
 - [ ] footer
 - [ ] make multiple maps (car positions) and the self-driving car's respective neural network for that map
 - [ ] make neural networks for float AI speeds (currently it's only integers between 3-6)
