@@ -7,8 +7,9 @@
 
   import { Tabs } from '@svelteuidev/core';
   import { EnvelopeClosed, Gear, InfoCircled } from 'radix-icons-svelte';
-  import Brain from "$lib/brain.svelte";
-import RaceFlag from '$lib/raceFlag.svelte';
+  import Brain from '$lib/brain.svelte';
+  import RaceFlag from '$lib/raceFlag.svelte';
+  import About from './about.svelte';
 
   onMount(() => {
     for (let i in brains) {
@@ -19,28 +20,25 @@ import RaceFlag from '$lib/raceFlag.svelte';
   });
 </script>
 
-  <Tabs color="cyan" tabPadding="lg">
-    <Tabs.Tab label="Racing Mode" icon={RaceFlag}>
-      <RaceConfig />
-    </Tabs.Tab>
-    <Tabs.Tab label="Learning Mode" icon={Brain}><LearnConfig /></Tabs.Tab>
-    <Tabs.Tab icon={InfoCircled}>About tab content</Tabs.Tab>
-  </Tabs>
+<Tabs color="cyan" tabPadding="lg">
+  <Tabs.Tab label="Racing Mode" icon={RaceFlag}>
+    <RaceConfig />
+  </Tabs.Tab>
+  <Tabs.Tab label="Learning Mode" icon={Brain}><LearnConfig /></Tabs.Tab>
+  <Tabs.Tab icon={InfoCircled}><About /></Tabs.Tab>
+</Tabs>
 
-  <!-- <div style="margin-top: 1em;">
+<!-- <div style="margin-top: 1em;">
     <div>Programmatically select:</div>
     {#each tabs as tab}
       <Button on:click={() => (active = tab)}><Label>{tab}</Label></Button>
     {/each}
   </div> -->
 
-  <!-- {#if active === 'Racing Mode'}
+<!-- {#if active === 'Racing Mode'}
     <RaceConfig />
   {:else if active === 'Learning Mode'}
     <LearnConfig />
   {/if}
      -->
 
-<style>
-
-</style>
