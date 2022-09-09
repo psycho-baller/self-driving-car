@@ -31,6 +31,8 @@
             The speed of the cars
         </li>
     </Text>
+    <hr />
+    <hr />
     <Text>
       This website was initially made by following a <a href="https://youtu.be/Rs_rAxEsAvI">tutorial</a> by <a href="https://radufromfinland.com/">Radu From Finland</a> but then I added my own twist to it by adding a Racing Mode
     </Text>

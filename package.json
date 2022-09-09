@@ -1,6 +1,6 @@
 {
-	"name": "self-driving-car",
-	"version": "0.0.1",
+	"name": "psycho-driver",
+	"version": "1.0.0",
 	"private": false,
 	"scripts": {
 		"dev": "vite dev",
