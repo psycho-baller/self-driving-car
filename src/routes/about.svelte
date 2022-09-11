@@ -44,5 +44,14 @@
     padding-left: 5px;
     padding-bottom: 10px;
 }
+a{
+    color: rgb(16, 152, 173);
+}
+a:hover{
+    color: rgb(0, 255, 149);
+}
+a:active{
+    color: rgb(111, 0, 255);
+}
 
 </style>

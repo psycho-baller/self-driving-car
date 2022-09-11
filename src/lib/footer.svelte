@@ -19,12 +19,12 @@
       target={'_blank'}
       rel={'noopener noreferrer'}
     >
-      <LinkedinLogo title="personal website" aria-label="personal website"/>
+      <LinkedinLogo color="blue" />
     </a>
     <Space   />
     <Space   />
     <a href="https://rami-maalouf.vercel.app/" target={'_blank'} rel={'noopener noreferrer'}>
-      <Home />
+      <Home title="personal website" aria-label="personal website"/>
     </a>
     <Space   />
     <Space   />
