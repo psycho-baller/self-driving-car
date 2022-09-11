@@ -34,7 +34,7 @@
     <hr />
 
     <Text>
-      This website was initially made by following a <a href="https://youtu.be/Rs_rAxEsAvI">tutorial</a> by <a href="https://radufromfinland.com/">Radu From Finland</a> but then I added my own twist to it by adding a Racing Mode
+      This website was initially made by following a <a href="https://youtu.be/Rs_rAxEsAvI">tutorial</a> by <a href="https://radufromfinland.com/">Radu From Finland</a> but then I added my own twist to it by adding a Racing Mode. You can check out my code <a href="https://github.com/psycho-baller/self-driving-car">here</a>
     </Text>
   </Stack>
 </Container>
