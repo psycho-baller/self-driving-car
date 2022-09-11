@@ -6,10 +6,11 @@
   import { brains } from '../data/brains';
 
   import { Tabs } from '@svelteuidev/core';
-  import { EnvelopeClosed, Gear, InfoCircled } from 'radix-icons-svelte';
+  import { EnvelopeClosed, InfoCircled } from 'radix-icons-svelte';
   import Brain from '$lib/brain.svelte';
   import RaceFlag from '$lib/raceFlag.svelte';
   import About from './about.svelte';
+import Footer from '$lib/footer.svelte';
 
   onMount(() => {
     for (let i in brains) {
@@ -20,13 +21,17 @@
   });
 </script>
 
-<Tabs color="cyan" tabPadding="lg">
+<div>
+<Tabs  color="cyan" tabPadding="lg">
   <Tabs.Tab label="Racing Mode" icon={RaceFlag}>
     <RaceConfig />
   </Tabs.Tab>
   <Tabs.Tab label="Learning Mode" icon={Brain}><LearnConfig /></Tabs.Tab>
   <Tabs.Tab icon={InfoCircled}><About /></Tabs.Tab>
 </Tabs>
+<Footer/>
+</div>
+
 
 <!-- <div style="margin-top: 1em;">
     <div>Programmatically select:</div>

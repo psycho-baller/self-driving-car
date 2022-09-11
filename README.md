@@ -26,7 +26,7 @@
 # Future plans
 
 - [x] about section
-- [ ] footer
+- [x] footer
 - [ ] make multiple maps (car positions) and the self-driving car's respective neural network for that map
 - [ ] make neural networks for float AI speeds (currently it's only integers between 3-6)
 - [ ] save data (neural networks for each speed and map) to a database instead of a file and localStorage
