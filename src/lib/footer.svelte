@@ -6,7 +6,7 @@
 <footer>
   <Group spacing="xl" position="center" grow noWrap>
     <a
-      href="https://github.com/psycho-baller/open-seat-notifier"
+      href="https://github.com/psycho-baller/self-driving-car"
       target={'_blank'}
       rel={'noopener noreferrer'}
     >
