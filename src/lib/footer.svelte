@@ -10,10 +10,10 @@
       target={'_blank'}
       rel={'noopener noreferrer'}
     >
-      <GithubLogo title="github" aria-label="github"/>
+      <GithubLogo title="github" aria-label="github" />
     </a>
-    <Space   />
-    <Space   />
+    <Space />
+    <Space />
     <a
       href="https://www.linkedin.com/in/rami--maalouf/"
       target={'_blank'}
@@ -21,24 +21,24 @@
     >
       <LinkedinLogo color="blue" />
     </a>
-    <Space   />
-    <Space   />
-    <a href="https://rami-maalouf.vercel.app/" target={'_blank'} rel={'noopener noreferrer'}>
-      <Home title="personal website" aria-label="personal website"/>
+    <Space />
+    <Space />
+    <a href="https://rami-maalouf.tech" target={'_blank'} rel={'noopener noreferrer'}>
+      <Home title="personal website" aria-label="personal website" />
     </a>
-    <Space   />
-    <Space   />
+    <Space />
+    <Space />
     <a href="mailto:rami.rami@ucalgary.ca" target={'_blank'} rel={'noopener noreferrer'}>
       <EnvelopeClosed color="blue" title="email" aria-label="email" />
     </a>
-    <Space   />
-    <Space   />
+    <Space />
+    <Space />
     <a
       href="https://www.youtube.com/channel/UCf9CoIzXxFcwlwaNuN5_1BQ"
       target={'_blank'}
       rel={'noopener noreferrer'}
     >
-      <Video color="red" title="youtube" aria-label="youtube"/>
+      <Video color="red" title="youtube" aria-label="youtube" />
     </a>
   </Group>
 </footer>
